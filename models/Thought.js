@@ -1,9 +1,10 @@
 const { Schema, model } = require('mongoose');
+const { DateTime } = require("luxon");
 //crearing Thought schema
 const thoughSchema = new Schema(
   {
     thoughtText: {String, required: true, minLength: 1, maxLength: 280},
-    createdAt: {Date, default: () => new Date(+new Date() + 7*24*60*60*1000)},
+    createdAt: {Date, default: () => DateTime.now()},
     username: {String, required: true},
     reactions: [reactionSchema],
   },
