@@ -1,12 +1,13 @@
 const { Schema, model } = require('mongoose');
 const { DateTime } = require("luxon");
+const reactionSchema = require('./Reaction');
 //crearing Thought schema
-const thoughSchema = new Schema(
+const thoughtSchema = new Schema(
   {
-    thoughtText: {String, required: true, minLength: 1, maxLength: 280},
-    createdAt: {Date, default: () => DateTime.now()},
-    username: {String, required: true},
-    reactions: [reactionSchema],
+    thoughtText: {type: String, required: true, minLength: 1, maxLength: 280},
+    createdAt: {type: Date, default: DateTime.now().toLocaleString(DateTime.DATE_MED)},
+    username: {type: String, required: true},
+    reactions: [reactionSchema.schema],
   },
   {
     toJSON: {
@@ -16,12 +17,12 @@ const thoughSchema = new Schema(
   }
 );
 //adding virtual field reactionCount
-thoughSchema
+thoughtSchema
   .virtual('reactionCount')
   .get(function () {
     return this.reactions.length;
   });
 
-const Thought = model('though', thoughSchema);
+const Thought = model('thought', thoughtSchema);
 
 module.exports = Thought;
