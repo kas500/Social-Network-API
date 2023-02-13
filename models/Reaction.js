@@ -1,36 +1,40 @@
 const { Schema, model } = require('mongoose');
 const { DateTime } = require("luxon");
-//crearing Thought schema
+
 const reactionSchema = new Schema(
-  {
-    reactionId: {
-        type: Schema.Types.ObjectId,
-        default: () => new Types.ObjectId(),
-      },
-    reactionBody: {String, required: true, maxLength: 280},
-    username: {String, required: true},
-    reactions: [reactionSchema],
-    createdAt: {
-        Date, 
-        default: () => DateTime.now()},
-        get(){
-            return this.createdAt.toLocaleString(DateTime.DATE_MED);
+    {
+      reactionId: {
+          type: Schema.Types.ObjectId,
+          default: () => new Types.ObjectId(),
+        },
+      reactionBody: {type: String, required: true, maxLength: 280},
+      username: {type: String, required: true}, 
+      createdAt: {
+          type: Date, 
+          default: DateTime.now(),
+          get: formatedDate,
         }
-  },
-  {
-    toJSON: {
-      virtuals: true,
     },
-    id: false,
+    {
+      toJSON: {
+        virtuals: true,
+        getters: true
+      },
+      id: false,
+    }
+  );
+
+  function formatedDate(createdAt) {
+    return createdAt.toLocaleString(DateTime.DATE_MED);
   }
-);
-//adding virtual field reactionCount
-thoughSchema
-  .virtual('reactionCount')
-  .get(function () {
-    return this.reactions.length;
-  });
+  //adding virtual field reactionCount
+  reactionSchema
+    .virtual('reactionCount')
+    .get(function () {
+      return this.reactions.length;
+    });
 
-const Thought = model('though', thoughSchema);
 
-module.exports = Thought;
+const Reaction = model('reaction', reactionSchema);
+
+module.exports = Reaction;
