@@ -106,6 +106,7 @@ const reactions =[
   'Bad!',
 ]
 
+const getRandomIndex = (arr) => Math.floor(Math.random() * arr.length);
 // Get a random item given an array
 const getRandomArrItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
@@ -125,5 +126,6 @@ const getRandomReaction = () =>
     getRandomEmail,
     getRandomUserName,
     getRandomThought,
-    getRandomReaction
+    getRandomReaction,
+    getRandomIndex
   };  
