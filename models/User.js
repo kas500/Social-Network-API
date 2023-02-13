@@ -2,8 +2,8 @@ const { Schema, model } = require('mongoose');
 //crearing User schema
 const userSchema = new Schema(
   {
-    username: {String, unique : true, trim: true, required: true},
-    email: {String, unique : true, required: true,
+    username: {type: String, unique : true, trim: true, required: true},
+    email: {type: String, unique : true, required: true,
     validate: {
       validator: function(v) {
         return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v)
