@@ -1,7 +1,6 @@
 const connection = require('../config/connection');
 const { ObjectId } = require('mongoose').Types;
 const {Thought, User } = require('../models');
-const Reaction = require('../models/Reaction');
 const {getRandomEmail, getRandomUserName, getRandomThought, getRandomReaction, getRandomIndex } = require('./data');
 const { DateTime } = require("luxon");
 
@@ -19,10 +18,7 @@ connection.once('open', async () => {
   await Thought.deleteMany({});
 
   // Drop existing thoughts
-  await Reaction.deleteMany({});
-  
   const users = [];
-  const reactions = [];
   const thougths = [];
 
   for (let i = 0; i < 10; i++) {
@@ -33,31 +29,17 @@ connection.once('open', async () => {
     users.push(newUser);
   }
   
-  for (let i = 0; i < 5; i++) {
-    const newReaction = {
-      reactionBody: getRandomReaction(),
-      username: users[Math.floor(Math.random() * users.length)].username,
-    };
-    reactions.push(newReaction);
-  }
-
-  
-  
   for (let i = 0; i < 10; i++) {
     const newThought = {
       thoughtText: getRandomThought(),
       username: users[Math.floor(Math.random() * users.length)].username,
-      reactions: [...reactions]
     };
     thougths.push(newThought);
   }
 
-
-  
   // Wait for the users to be inserted into the database
   await User.collection.insertMany(users);
   await Thought.collection.insertMany(thougths);
-  await Reaction.collection.insertMany(reactions);
 
   console.table(users);
   console.info('Seeding complete! 🌱');
