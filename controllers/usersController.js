@@ -1,26 +1,28 @@
 // ObjectId() method for converting user Id string into an ObjectId for querying database
-const { ObjectId } = require('mongoose').Types;
+// const { ObjectId } = require('mongoose').Types;
 const { User, Thought, Reaction } = require('../models');
 
 module.exports = {
   // Get all users
   getUsers(req, res) {
     User.find()
-      .then(async (users) => {
+    .populate('friends')
+    .then(async (users) => {
         const usersObj = {
           users
         };
         return res.json(usersObj);
-      })
+    })
       .catch((err) => {
         console.log(err);
         return res.status(500).json(err);
-      });
+    });
   },
   // Get a single user
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
       .select('-__v')
+      .populate('friends')
       .lean()
       .then(async (user) =>
         !user
@@ -40,6 +42,23 @@ module.exports = {
       .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
+  //update user
+  updateUser(req,res){
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    )
+      .then((application) =>
+        !application
+          ? res.status(404).json({ message: 'No user with this id!' })
+          : res.json(application)
+      )
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  },
   // Delete a user
   deleteUser(req, res) {
     User.findOneAndDelete({ _id: req.params.userId })
@@ -54,7 +73,7 @@ module.exports = {
       })
       .catch((err) => res.json(err))
     },
-//addFriend
+//add Friend
   addFriend(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId },
