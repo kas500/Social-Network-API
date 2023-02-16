@@ -21,7 +21,8 @@ in order to test the application, you need to install and open Insomnia app (or 
 
 ### Walkthrough video
 
-  
+https://user-images.githubusercontent.com/38312017/219317586-a49b9d05-adcd-4e95-a5be-20402a5026a9.MOV
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
